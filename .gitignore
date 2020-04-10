@@ -1,23 +1,13 @@
-# Folders:
-**/node_modules/**
-**/__pycache__/**
-
-# VSCode:
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# Filetypes:
-*.jpg
-*.png
-*.gif
-*.pdf
+node_modules
+coverage
+.next
+__snapshots__
+out
+npm-debug.log
+.vscode
 *.indd
 *.psd
-*.avi
-*.mp3
-*.mp4
 *.wav
 *.txt
+*.wg
+.DS_Store
