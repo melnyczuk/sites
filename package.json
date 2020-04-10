@@ -1,0 +1,69 @@
+{
+  "name": "single-use",
+  "version": "0.1.0",
+  "main": "./pages/index.tsx",
+  "private": true,
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "next": "^9.2.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "yaml": "^1.8.3"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "@zeit/next-sass": "^1.0.1",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.1",
+    "node-sass": "^4.13.1",
+    "prettier": "^2.0.2",
+    "sass": "^1.22.9",
+    "serve": "^11.1.0",
+    "typescript": "^3.5.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "yarn lint:fix",
+      "yarn prettier",
+      "git add"
+    ]
+  },
+  "resolutions": {
+    "@typescript-eslint/parser": "^1.11.0",
+    "@typescript-eslint/eslint-plugin": "^1.11.0"
+  },
+  "scripts": {
+    "build": "next build",
+    "dev": "next",
+    "dist": "yarn build && yarn export",
+    "export": "next export",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint --fix",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write './{pages,src}/**/*.{js,ts,tsx}'",
+    "sass": "sass ./src/styles/index.scss ./out/index.css && rm ./out/index.css.map",
+    "start": "next start",
+    "serve": "serve -p 8080 out",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "yarn type-check -- --watch"
+  }
+}
