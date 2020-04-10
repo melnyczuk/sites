@@ -1,10 +1,6 @@
 import React, { FC } from 'react';
-import fs from 'fs';
 
-const pages = fs
-  .readdirSync('./pages')
-  .filter(filename => filename !== 'index.tsx')
-  .map(filename => filename.split('.')[0]);
+const pages = [];
 
 const index: FC = () => (
   <ul>
