@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { useAsync } from 'react-use';
 
+const ENDPOINT = 'https://imgxxxx.herokuapp.com/link';
+
 const fetchData = async (): Promise<string> => {
   // eslint-disable-next-line no-undef
-  const resp = await fetch('http://localhost:3001/link');
+  const resp = await fetch(ENDPOINT);
   return await resp.text();
 };
 
