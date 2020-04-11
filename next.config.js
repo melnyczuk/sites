@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const fs = require('fs');
-const withSass = require('@zeit/next-sass');
 
-module.exports = withSass({
+const clientSide = (isServer) => (isServer ? 'empty' : true);
+const serverSide = (isServer) => (isServer ? true : 'empty');
+
+module.exports = {
   exportPathMap: () =>
     fs
       .readdirSync('./pages')
@@ -12,5 +15,12 @@ module.exports = withSass({
       .reduce((acc, page) => ({ ...acc, [page]: { page } }), {
         '/': { page: '/' },
       }),
-  webpack: (config) => config,
-});
+  webpack: (config, { isServer }) => ({
+    ...config,
+    node: {
+      ...config.node,
+      fetch: clientSide(isServer),
+      window: clientSide(isServer),
+    },
+  }),
+};

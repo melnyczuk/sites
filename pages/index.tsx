@@ -1,14 +1,12 @@
 import React, { FC } from 'react';
 
-const pages = [];
+const pages = ['imgxxxx'];
 
 const index: FC = () => (
   <ul>
-    {pages.map(page => (
+    {pages.map((page) => (
       <ul key={page}>
-        <a href={`/${page}`} >
-          {page}
-        </a>
+        <a href={`/${page}`}>{page}</a>
       </ul>
     ))}
   </ul>
