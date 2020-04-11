@@ -4,7 +4,7 @@ import { useAsync } from 'react-use';
 const fetchData = async (): Promise<string> => {
   // eslint-disable-next-line no-undef
   const resp = await fetch('http://localhost:3001/link');
-  return await resp.json();
+  return await resp.text();
 };
 
 // eslint-disable-next-line no-undef
@@ -19,11 +19,10 @@ const Imgxxxx: FC = () => {
 
   if (error) {
     reload();
-    return null;
   }
 
   return (
-    <video onEnded={reload} width="1280" height="720" autoPlay>
+    <video autoPlay onEnded={reload} width="1280" height="720" >
       <source src={value} />
     </video>
   );
