@@ -1,4 +1,5 @@
 import React, { FC, CSSProperties } from 'react';
+import '../public/static/base.css';
 
 const pages = ['imgxxxx', 'another'];
 
@@ -27,10 +28,12 @@ const styles: Record<HTMLElement['namespaceURI'], CSSProperties> = {
 };
 
 const index: FC = () => (
-  <ul style={styles.ul} >
+  <ul style={styles.ul}>
     {pages.map((page) => (
       <li style={styles.li} key={page}>
-        <a style={styles.a} href={`/${page}`}>{page}</a>
+        <a style={styles.a} href={`/${page}`}>
+          {page}
+        </a>
       </li>
     ))}
   </ul>

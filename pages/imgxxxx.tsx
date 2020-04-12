@@ -1,10 +1,12 @@
 import React, { FC, CSSProperties, useState } from 'react';
 import { useAsync, useUpdate, useInterval } from 'react-use';
+import '../public/static/base.css';
 
 const ENDPOINT = 'https://imgxxxx.herokuapp.com/link';
 
 const styles: Record<HTMLElement['namespaceURI'], CSSProperties> = {
-  p: { 
+  p: {
+    fontFamily: '"Archivo"',
     fontSize: '18px',
     margin: '32px',
   },
@@ -27,7 +29,9 @@ const fetchData = async (): Promise<string> => {
 
 const Ellipsis: FC = () => {
   const [count, setCount] = useState(0);
-  useInterval(() => { setCount(count + 1); }, 500);
+  useInterval(() => {
+    setCount(count + 1);
+  }, 500);
   return <>{'.'.repeat(count % 4)}</>;
 };
 
@@ -36,7 +40,12 @@ const Imgxxxx: FC = () => {
   const { loading, error, value } = useAsync(fetchData);
 
   if (loading) {
-    return <p style={styles.p}>loading<Ellipsis /></p>;
+    return (
+      <p style={styles.p}>
+        loading
+        <Ellipsis />
+      </p>
+    );
   }
 
   if (error) {
@@ -44,7 +53,13 @@ const Imgxxxx: FC = () => {
   }
 
   return (
-    <video autoPlay style={styles.video} onEnded={update} width="1280" height="720" >
+    <video
+      autoPlay
+      style={styles.video}
+      onEnded={update}
+      width="1280"
+      height="720"
+    >
       <source src={value} />
     </video>
   );
