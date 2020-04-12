@@ -3,14 +3,20 @@ import { useAsync, useUpdate, useInterval } from 'react-use';
 
 const ENDPOINT = 'https://imgxxxx.herokuapp.com/link';
 
-const styles: CSSProperties = {
-  fontFamily: 'initial',
-  display: 'block',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  width: '80%',
-  textAlign: 'center',
-  minHeight: 200,
+const styles: Record<HTMLElement['namespaceURI'], CSSProperties> = {
+  p: { 
+    fontSize: '18px',
+    margin: '32px',
+  },
+  video: {
+    fontFamily: 'initial',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '80%',
+    textAlign: 'center',
+    minHeight: 200,
+  },
 };
 
 const fetchData = async (): Promise<string> => {
@@ -30,7 +36,7 @@ const Imgxxxx: FC = () => {
   const { loading, error, value } = useAsync(fetchData);
 
   if (loading) {
-    return <p>loading<Ellipsis /></p>;
+    return <p style={styles.p}>loading<Ellipsis /></p>;
   }
 
   if (error) {
@@ -38,7 +44,7 @@ const Imgxxxx: FC = () => {
   }
 
   return (
-    <video autoPlay style={styles} onEnded={update} width="1280" height="720" >
+    <video autoPlay style={styles.video} onEnded={update} width="1280" height="720" >
       <source src={value} />
     </video>
   );
