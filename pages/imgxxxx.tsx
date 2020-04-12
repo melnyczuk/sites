@@ -1,7 +1,17 @@
-import React, { FC } from 'react';
-import { useAsync } from 'react-use';
+import React, { FC, CSSProperties, useState } from 'react';
+import { useAsync, useUpdate, useInterval } from 'react-use';
 
 const ENDPOINT = 'https://imgxxxx.herokuapp.com/link';
+
+const styles: CSSProperties = {
+  fontFamily: 'initial',
+  display: 'block',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  width: '80%',
+  textAlign: 'center',
+  minHeight: 200,
+};
 
 const fetchData = async (): Promise<string> => {
   // eslint-disable-next-line no-undef
@@ -9,22 +19,26 @@ const fetchData = async (): Promise<string> => {
   return await resp.text();
 };
 
-// eslint-disable-next-line no-undef
-const reload = () => window.location.reload();
+const Ellipsis: FC = () => {
+  const [count, setCount] = useState(0);
+  useInterval(() => { setCount(count + 1); }, 500);
+  return <>{'.'.repeat(count % 4)}</>;
+};
 
 const Imgxxxx: FC = () => {
+  const update = useUpdate();
   const { loading, error, value } = useAsync(fetchData);
 
   if (loading) {
-    return <div>loading</div>;
+    return <p>loading<Ellipsis /></p>;
   }
 
   if (error) {
-    reload();
+    update();
   }
 
   return (
-    <video autoPlay onEnded={reload} width="1280" height="720" >
+    <video autoPlay style={styles} onEnded={update} width="1280" height="720" >
       <source src={value} />
     </video>
   );
