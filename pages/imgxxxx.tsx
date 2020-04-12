@@ -57,8 +57,6 @@ const Imgxxxx: FC = () => {
       autoPlay
       style={styles.video}
       onEnded={update}
-      width="1280"
-      height="720"
     >
       <source src={value} />
     </video>
