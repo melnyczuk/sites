@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const fs = require('fs');
+const withCSS = require('@zeit/next-css');
 
 const clientSide = (isServer) => (isServer ? 'empty' : true);
 const serverSide = (isServer) => (isServer ? true : 'empty');
 
-module.exports = {
+module.exports = withCSS({
   exportPathMap: () =>
     fs
       .readdirSync('./pages')
@@ -23,4 +24,4 @@ module.exports = {
       window: clientSide(isServer),
     },
   }),
-};
+});
