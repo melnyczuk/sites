@@ -1,13 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Archivo');
-
-html {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
+@import url('https://meyerweb.com/eric/tools/css/reset/reset.css');
 
 a, a:visited {
   color: inherit;
