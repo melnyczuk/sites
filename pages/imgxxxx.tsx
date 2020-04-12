@@ -1,28 +1,34 @@
+/* eslint-disable no-undef */
 import React, { FC, CSSProperties, useState } from 'react';
 import { useAsync, useUpdate, useInterval } from 'react-use';
 import '../public/static/base.css';
 
-const ENDPOINT = 'https://imgxxxx.herokuapp.com/link';
+const ENDPOINT = 'http://localhost:3001/link' || 'https://imgxxxx.herokuapp.com/link';
+
+const { innerHeight = 0, innerWidth = 0 } = (typeof window !== 'undefined') ? window : {};
+
+const ratio = 0.6; 
 
 const styles: Record<HTMLElement['namespaceURI'], CSSProperties> = {
   p: {
-    fontFamily: '"Archivo"',
+    fontFamily: 'initial',
     fontSize: '18px',
     margin: '32px',
   },
   video: {
-    fontFamily: 'initial',
     display: 'block',
+    fontFamily: 'initial',
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: '80%',
     textAlign: 'center',
-    minHeight: 200,
+    width: innerWidth * ratio,
+    height: innerHeight * ratio,
+    padding: innerWidth * (1.0 - ratio) * 0.5,
+    paddingTop: innerHeight * (1.0 - ratio) * 0.2,
   },
 };
 
 const fetchData = async (): Promise<string> => {
-  // eslint-disable-next-line no-undef
   const resp = await fetch(ENDPOINT);
   return await resp.text();
 };
@@ -53,11 +59,7 @@ const Imgxxxx: FC = () => {
   }
 
   return (
-    <video
-      autoPlay
-      style={styles.video}
-      onEnded={update}
-    >
+    <video style={styles.video} autoPlay onEnded={update} >
       <source src={value} />
     </video>
   );
