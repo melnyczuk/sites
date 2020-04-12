@@ -1,7 +1,7 @@
 import React, { FC, CSSProperties } from 'react';
 import '../public/static/base.css';
 
-const pages = ['imgxxxx', 'another'];
+const pages = ['imgxxxx'];
 
 const styles: Record<HTMLElement['namespaceURI'], CSSProperties> = {
   a: {
