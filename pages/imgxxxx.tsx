@@ -3,7 +3,7 @@ import React, { FC, CSSProperties, useState } from 'react';
 import { useAsync, useUpdate, useInterval } from 'react-use';
 import '../public/static/base.css';
 
-const ENDPOINT = 'http://localhost:3001/link' || 'https://imgxxxx.herokuapp.com/link';
+const ENDPOINT = 'https://imgxxxx.herokuapp.com/link';
 
 const { innerHeight = 0, innerWidth = 0 } = (typeof window !== 'undefined') ? window : {};
 
