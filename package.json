@@ -55,6 +55,7 @@
     "export": "next export",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
+    "new:page": "sh -c 'sed s/page/${0}/g ./demo/page.tsx > ./pages/${0}.tsx'",
     "prettier": "prettier --single-quote --trailing-comma es5 --write './{pages,src}/**/*.{js,ts,tsx}'",
     "sass": "sass ./src/styles/index.scss ./out/index.css && rm ./out/index.css.map",
     "start": "next start",
