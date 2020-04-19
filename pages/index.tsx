@@ -1,9 +1,11 @@
-import React, { FC, CSSProperties } from 'react';
+import React, { FC } from 'react';
+
+import { Styles } from '../types';
 import '../public/static/base.css';
 
 const pages = ['imgxxxx'];
 
-const styles: Record<HTMLElement['namespaceURI'], CSSProperties> = {
+const styles: Styles = {
   a: {
     fontFamily: '"Archivo", sans-serif',
     fontSize: '40px',
