@@ -19,7 +19,7 @@ const ROCK_PATH = '/static/ahirespngofarock.png';
 const SPEED = 0.01;
 const BULGE = 36;
 
-const geometry = time => {
+const geometry = (time: number): PlaneGeometry => {
   const geo = new PlaneGeometry(innerHeight, innerHeight, 5, 5);
   geo.vertices.forEach((vert, i, { length }) =>
     vert.setZ(BULGE * Math.cos(time + (i % length)))
