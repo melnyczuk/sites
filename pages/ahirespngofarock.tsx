@@ -38,7 +38,7 @@ const Rock: FC = () => {
   const { error, value } = useAsync(getTexture);
 
   useFrame(({ scene }) => {   
-    const { geometry } = scene.children[0] as Mesh & { geometry: PlaneGeometry};
+    const { geometry } = scene.children[1] as Mesh & { geometry: PlaneGeometry};
     
     setTime(time + SPEED);
 
