@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { FC, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Canvas, useFrame } from 'react-three-fiber';
@@ -15,12 +16,6 @@ import '../public/static/base.css';
 
 const ROCK_PATH = '/static/ahirespngofarock.png';
 const SPEED = 0.01;
-
-const {
-  innerWidth = 500,
-  innerHeight = 500,
-// eslint-disable-next-line no-undef
-} = typeof(window) === 'undefined' ? {} : window;
 
 const getTexture = async (): Promise<Texture> => {
   return await new TextureLoader().load(ROCK_PATH, (tex) => {
@@ -53,7 +48,7 @@ const Rock: FC = () => {
     <mesh> 
       <planeGeometry 
         attach="geometry" 
-        args={[innerHeight * 0.8, innerHeight, 5, 5]} 
+        args={[window.innerHeight * 0.8, window.innerHeight, 5, 5]} 
       />
       <meshStandardMaterial 
         transparent
@@ -65,17 +60,18 @@ const Rock: FC = () => {
   );
 };
 
-const ahirespngofarock: FC = () => (
-  <div style={{ width: innerWidth, height: innerHeight }} >
-    <Canvas camera={{
-      far: 10000,
-      position: [0, 0, 500],
-      rotation: [-Math.PI / 250, Math.PI / 100, 0],
-    }}>
-      <ambientLight />
-      <Rock />
-    </Canvas>
-  </div>
-);
+const ahirespngofarock: FC = () =>
+  (!(process as NodeJS.Process & { browser: boolean }).browser) ? null : (
+    <div style={{ width: window.innerWidth, height: window.innerHeight }} >
+      <Canvas camera={{
+        far: 10000,
+        position: [0, 0, 500],
+        rotation: [-Math.PI / 250, Math.PI / 100, 0],
+      }}>
+        <ambientLight />
+        <Rock />
+      </Canvas>
+    </div>
+  );
 
 export default ahirespngofarock;
