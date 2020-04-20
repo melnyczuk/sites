@@ -4,6 +4,7 @@ import { useAsync } from 'react-use';
 import { Canvas, useFrame, useThree } from 'react-three-fiber';
 import {
   ClampToEdgeWrapping,
+  Color,
   FrontSide,
   Mesh,
   PlaneGeometry,
@@ -17,6 +18,8 @@ import '../public/static/base.css';
 const ROCK_PATH = '/static/ahirespngofarock.png';
 const SPEED = 0.01;
 const BULGE = 36;
+const BLACK = new Color(0xffffff);
+const WHITE = new Color(0x101010);
 
 const geometry = time => {
   const geo = new PlaneGeometry(innerHeight, innerHeight, 5, 5);
@@ -39,16 +42,18 @@ const texture = async (): Promise<Texture> => {
 const Rock: FC = () => {
   const { gl } = useThree();
   const [time, setTime] = useState(0);
+  const [color, setColor] = useState(BLACK);
   const { error, value } = useAsync(texture);
 
   useFrame(({ scene }) => {
     setTime(time + SPEED);
     (scene.children[1] as Mesh).geometry = geometry(time);
+    (scene.background as Color) = color;
     gl.setSize(innerWidth, innerHeight);
   });
 
   return error ? null : (
-    <mesh>
+    <mesh onClick={() => { setColor(color.equals(BLACK) ? WHITE : BLACK); }} >
       <planeGeometry attach="geometry" />
       <meshStandardMaterial
         transparent
