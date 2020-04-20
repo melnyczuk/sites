@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 import React, { FC, useState } from 'react';
 import { useAsync } from 'react-use';
-import { Canvas, useFrame } from 'react-three-fiber';
-import { 
+import { Canvas, useFrame, useThree } from 'react-three-fiber';
+import {
   ClampToEdgeWrapping,
   FrontSide,
   Mesh,
@@ -16,8 +16,18 @@ import '../public/static/base.css';
 
 const ROCK_PATH = '/static/ahirespngofarock.png';
 const SPEED = 0.01;
+const BULGE = 36;
 
-const getTexture = async (): Promise<Texture> => {
+const geometry = time => {
+  const geo = new PlaneGeometry(innerHeight, innerHeight, 5, 5);
+  geo.vertices.forEach((vert, i, { length }) =>
+    vert.setZ(BULGE * Math.cos(time + (i % length)))
+  );
+  geo.verticesNeedUpdate = true;
+  return geo;
+};
+
+const texture = async (): Promise<Texture> => {
   return await new TextureLoader().load(ROCK_PATH, (tex) => {
     tex.mapping = UVMapping;
     tex.wrapS = ClampToEdgeWrapping;
@@ -26,52 +36,45 @@ const getTexture = async (): Promise<Texture> => {
   });
 };
 
-
 const Rock: FC = () => {
+  const { gl } = useThree();
   const [time, setTime] = useState(0);
+  const { error, value } = useAsync(texture);
 
-  const { error, value } = useAsync(getTexture);
-
-  useFrame(({ scene }) => {   
-    const { geometry } = scene.children[1] as Mesh & { geometry: PlaneGeometry};
-    
+  useFrame(({ scene }) => {
     setTime(time + SPEED);
-
-    geometry.vertices.forEach((vert, i, { length }) => 
-      vert.setZ(64 * Math.cos(time + (i % length)))
-    );
-
-    geometry.verticesNeedUpdate = true;
+    (scene.children[1] as Mesh).geometry = geometry(time);
+    gl.setSize(innerWidth, innerHeight);
   });
 
   return error ? null : (
-    <mesh> 
-      <planeGeometry 
-        attach="geometry" 
-        args={[window.innerHeight * 0.8, window.innerHeight, 5, 5]} 
-      />
-      <meshStandardMaterial 
+    <mesh>
+      <planeGeometry attach="geometry" />
+      <meshStandardMaterial
         transparent
         attach="material"
-        map={value} 
+        map={value}
         side={FrontSide}
       />
     </mesh>
   );
 };
 
-const ahirespngofarock: FC = () =>
-  (!(process as NodeJS.Process & { browser: boolean }).browser) ? null : (
-    <div style={{ width: window.innerWidth, height: window.innerHeight }} >
-      <Canvas camera={{
+const ahirespngofarock: FC = () => (
+  <div style={{ width: '100%', height: '100%' }} >
+    <Canvas
+      camera={{
+        aspect: 1,
         far: 10000,
-        position: [0, 0, 500],
+        near: 0.1,
+        position: [0, 0, 1000],
         rotation: [-Math.PI / 250, Math.PI / 100, 0],
-      }}>
-        <ambientLight />
-        <Rock />
-      </Canvas>
-    </div>
-  );
+      }}
+    >
+      <ambientLight />
+      <Rock />
+    </Canvas>
+  </div>
+);
 
 export default ahirespngofarock;
