@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Styles } from '../types';
 import '../public/static/base.css';
 
-const pages = ['imgxxxx', 'ahirespngofarock'];
+const pages = ['imgxxxx', 'a squiggle', 'ahirespngofarock'];
 
 const styles: Styles = {
   a: {
