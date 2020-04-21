@@ -16,23 +16,32 @@ const colors = [
 
 type Tuple<T> = [T,T];
 
-const one = ([bot, top]: Tuple<number>): number => Math.random() * (top - bot) + bot;
-const two = (x: Tuple<number>): string => `${one(x)} ${one(x)}`;
-const tri = (x: Tuple<number>): string => `${two(x)}, ${two(x)}, ${two(x)}`;
+const one = ([x, y]: Tuple<number>) => Math.random() * (y - x) + x;
+const two = (t: Tuple<Tuple<number>>) => t.map(one).join(' ');
+const tri = (t: Tuple<Tuple<number>>) => Array(3).fill(t).map(two).join(', ');
 
-const avg = () => (window.innerWidth + window.innerHeight) * 0.5;
-const arr = (s, e) => Array(Math.floor(one([s - e, s + e]))).fill(0);
+const rng = (s, e) => one([s - e, s + e]);
+const flo = (s, e) => Math.floor(rng(s, e));
+const arr = (s, e) => Array(flo(s, e)).fill(0);
+
 const pik = a => a[Math.floor(Math.random() * a.length)];
 
-const svg = (s: string): string => `M ${0.5 * window.innerWidth} ${0.5 * window.innerHeight} ${s} Z`;
+const win = ({ innerWidth, innerHeight }): Tuple<number> => [innerWidth, innerHeight];
+const cen = ({ innerWidth, innerHeight }) => `${0.5 * innerWidth} ${0.5 * innerHeight}`;
+
 const lim = (n: number): Tuple<number> => [0.1 * n, 0.9 * n];
-const pts = (n: number): string => `C ${tri(lim(n))}`;
-const red = (a: number[]): string => a.reduce(a => `${a} ${pts(avg())}`, '');
+
+const shi = (t: Tuple<number>): Tuple<number>[] => t.map(lim);
+const mtp = (t: Tuple<number>): Tuple<Tuple<number>> => [shi(t)[0], shi(t)[1]];
+const pts = (t: Tuple<number>): string => `C ${tri(mtp(t))}`;
+
+const red = (a: number[]): string => a.reduce(a => `${a} ${pts(win(window))}`, '');
+const svg = (s: string) => `M ${cen(window)} ${s} Z`;
 
 const squiggle: FC = () => (
   <div onClick={useUpdate()}>
     <svg width={window.innerWidth} height={window.innerHeight}>
-      <path d={svg(red(arr(10, 5)))} style={{ fill: 'none', stroke: pik(colors), strokeWidth: one([5, 20]) }} />
+      <path d={svg(red(arr(8, 3)))} style={{ fill: 'none', stroke: pik(colors), strokeWidth: one([8, 20]) }} />
     </svg>
   </div>
 );
