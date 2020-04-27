@@ -15,35 +15,54 @@ const colors = [
 ];
 
 type Tuple<T> = [T,T];
+function tuple<T> ([x, y]: T[]): Tuple<T> { return [x, y]; }
 
-const one = ([x, y]: Tuple<number>) => Math.random() * (y - x) + x;
-const two = (t: Tuple<Tuple<number>>) => t.map(one).join(' ');
-const tri = (t: Tuple<Tuple<number>>) => Array(3).fill(t).map(two).join(', ');
+type Triple<T> = [T,T,T];
+function triple<T> ([x, y, z]: T[]): Triple<T> { return [x, y, z]; }
 
-const rng = (s, e) => one([s - e, s + e]);
-const flo = (s, e) => Math.floor(rng(s, e));
-const arr = (s, e) => Array(flo(s, e)).fill(0);
+const limitValue = n => [0.1 * n, 0.9 * n];
+const centerOf = ([x, y]) => [x * 0.5, y * 0.5];
+const toRandomNum = ([lower, upper]) => Math.random() * (upper - lower) + lower;
 
-const pik = a => a[Math.floor(Math.random() * a.length)];
+const toTupleOfBoundsTuples = t => tuple<Tuple<number>>(t.map(limitValue));
+const toTupleOfRandomNums = t => tuple<number>(t.map(toRandomNum));
+const toCurveTriplet = bounds => triple<Tuple<number>>(Array(3).fill(bounds).map(toTupleOfRandomNums));
 
-const win = ({ innerWidth, innerHeight }): Tuple<number> => [innerWidth, innerHeight];
-const cen = ({ innerWidth, innerHeight }) => `${0.5 * innerWidth} ${0.5 * innerHeight}`;
+const toCurveString = ([[x1, y1], [x2, y2], [x, y]]: Triple<Tuple<number>>) => `C ${x1} ${y1} ${x2} ${y2} ${x} ${y}`;
 
-const lim = (n: number): Tuple<number> => [0.1 * n, 0.9 * n];
+const windowSize = (): Tuple<number> => [window.innerWidth, window.innerHeight];
+const pickFrom = (a: string[]): string => a[Math.floor(Math.random() * a.length)];
+const seedNumber = (seed: number, entropy: number): number => Math.floor(toRandomNum([seed - entropy, seed + entropy]));
 
-const shi = (t: Tuple<number>): Tuple<number>[] => t.map(lim);
-const mtp = (t: Tuple<number>): Tuple<Tuple<number>> => [shi(t)[0], shi(t)[1]];
-const pts = (t: Tuple<number>): string => `C ${tri(mtp(t))}`;
+const squiggle: FC = () => {
+  const seed = seedNumber(8, 3);
 
-const red = (a: number[]): string => a.reduce(a => `${a} ${pts(win(window))}`, '');
-const svg = (s: string) => `M ${cen(window)} ${s} Z`;
+  const moveTo = `M ${centerOf(windowSize())}`;
+  
+  const curveTo = Array(seed)
+    .fill(0)
+    .map(windowSize)
+    .map(toTupleOfBoundsTuples)
+    .map(toCurveTriplet)
+    .map(toCurveString)
+    .join(' ');
 
-const squiggle: FC = () => (
-  <div onClick={useUpdate()}>
-    <svg width={window.innerWidth} height={window.innerHeight}>
-      <path d={svg(red(arr(8, 3)))} style={{ fill: 'none', stroke: pik(colors), strokeWidth: one([8, 20]) }} />
-    </svg>
-  </div>
-);
+  const path = `${moveTo} ${curveTo} Z`;
+
+  console.log('path', path);
+
+  return (
+    <>
+      <div onClick={useUpdate()}>
+        <svg width={window.innerWidth} height={window.innerHeight}>
+          <path 
+            d={path} 
+            style={{ fill: 'none', stroke: pickFrom(colors), strokeWidth: seedNumber(14, 6) }} 
+          />
+        </svg>
+      </div>
+    </>
+  );
+};
 
 export default dynamic(() => Promise.resolve(squiggle), { ssr: false });
