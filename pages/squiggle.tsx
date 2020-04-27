@@ -15,24 +15,58 @@ const colors = [
 ];
 
 type Tuple<T> = [T,T];
-function tuple<T> ([x, y]: T[]): Tuple<T> { return [x, y]; }
+function Tuple<T>([x, y]: T[]): Tuple<T> { return [x, y]; }
 
 type Triple<T> = [T,T,T];
-function triple<T> ([x, y, z]: T[]): Triple<T> { return [x, y, z]; }
+function Triple<T>([x, y, z]: T[]): Triple<T> { return [x, y, z]; }
 
-const limitValue = n => [0.1 * n, 0.9 * n];
-const centerOf = ([x, y]) => [x * 0.5, y * 0.5];
-const toRandomNum = ([lower, upper]) => Math.random() * (upper - lower) + lower;
+function limitValue (n: number): Tuple<number> {
+  return [0.1 * n, 0.9 * n];
+} 
 
-const toTupleOfBoundsTuples = t => tuple<Tuple<number>>(t.map(limitValue));
-const toTupleOfRandomNums = t => tuple<number>(t.map(toRandomNum));
-const toCurveTriplet = bounds => triple<Tuple<number>>(Array(3).fill(bounds).map(toTupleOfRandomNums));
+function centerOf ([x, y]: Tuple<number>): Tuple<number> { 
+  return [x * 0.5, y * 0.5];
+}
 
-const toCurveString = ([[x1, y1], [x2, y2], [x, y]]: Triple<Tuple<number>>) => `C ${x1} ${y1} ${x2} ${y2} ${x} ${y}`;
+function toRandomNum ([lower, upper]: Tuple<number>): number { 
+  return Math.random() * (upper - lower) + lower;
+}
 
-const windowSize = (): Tuple<number> => [window.innerWidth, window.innerHeight];
-const pickFrom = (a: string[]): string => a[Math.floor(Math.random() * a.length)];
-const seedNumber = (seed: number, entropy: number): number => Math.floor(toRandomNum([seed - entropy, seed + entropy]));
+function toBounds (t: Tuple<number>): Tuple<Tuple<number>> { 
+  return Tuple<Tuple<number>>(
+    t.map(limitValue)
+  );
+}
+
+function toCoords (t: Tuple<Tuple<number>>): Tuple<number> {
+  return Tuple<number>(
+    t.map(toRandomNum)
+  );
+}
+
+function toCurveTriplet (size): Triple<Tuple<number>> {
+  return Triple<Tuple<number>>(
+    Array(3).fill(size).map(toBounds).map(toCoords)
+  );
+} 
+
+function toCurveString (coordTriplet: Triple<Tuple<number>>): string {
+  const [[x1, y1], [x2, y2], [x, y]] = coordTriplet;
+  return `C ${x1} ${y1} ${x2} ${y2} ${x} ${y}`;
+}
+
+function windowSize (): Tuple<number> {
+  const { innerWidth, innerHeight } = window;
+  return [innerWidth, innerHeight];
+} 
+
+function pickFrom (a: string[]): string {
+  return a[Math.floor(Math.random() * a.length)];
+} 
+
+function seedNumber (seed: number, entropy: number): number {
+  return Math.floor(toRandomNum([seed - entropy, seed + entropy]));
+}
 
 const squiggle: FC = () => {
   const seed = seedNumber(8, 3);
@@ -42,14 +76,11 @@ const squiggle: FC = () => {
   const curveTo = Array(seed)
     .fill(0)
     .map(windowSize)
-    .map(toTupleOfBoundsTuples)
     .map(toCurveTriplet)
     .map(toCurveString)
     .join(' ');
 
   const path = `${moveTo} ${curveTo} Z`;
-
-  console.log('path', path);
 
   return (
     <>
@@ -57,7 +88,11 @@ const squiggle: FC = () => {
         <svg width={window.innerWidth} height={window.innerHeight}>
           <path 
             d={path} 
-            style={{ fill: 'none', stroke: pickFrom(colors), strokeWidth: seedNumber(14, 6) }} 
+            style={{ 
+              fill: 'none', 
+              stroke: pickFrom(colors), 
+              strokeWidth: seedNumber(14, 6) 
+            }} 
           />
         </svg>
       </div>
