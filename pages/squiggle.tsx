@@ -20,6 +20,7 @@ function Tuple<T>([x, y]: T[]): Tuple<T> { return [x, y]; }
 type Triple<T> = [T,T,T];
 function Triple<T>([x, y, z]: T[]): Triple<T> { return [x, y, z]; }
 
+
 const squiggle: FC = () => {
   const seed = seedNumber(8, 3);
 
@@ -53,6 +54,7 @@ const squiggle: FC = () => {
 };
 
 export default dynamic(() => Promise.resolve(squiggle), { ssr: false });
+
 
 function limitValue (n: number): Tuple<number> {
   return [0.1 * n, 0.9 * n];
