@@ -20,6 +20,40 @@ function Tuple<T>([x, y]: T[]): Tuple<T> { return [x, y]; }
 type Triple<T> = [T,T,T];
 function Triple<T>([x, y, z]: T[]): Triple<T> { return [x, y, z]; }
 
+const squiggle: FC = () => {
+  const seed = seedNumber(8, 3);
+
+  const moveTo = `M ${centerOf(windowSize())}`;
+  
+  const curveTo = Array(seed)
+    .fill(0)
+    .map(windowSize)
+    .map(toCurveTriplet)
+    .map(toCurveString)
+    .join(' ');
+
+  const path = `${moveTo} ${curveTo} Z`;
+
+  return (
+    <>
+      <div onClick={useUpdate()}>
+        <svg width={window.innerWidth} height={window.innerHeight}>
+          <path 
+            d={path} 
+            style={{ 
+              fill: 'none', 
+              stroke: pickFrom(colors), 
+              strokeWidth: seedNumber(14, 6) 
+            }} 
+          />
+        </svg>
+      </div>
+    </>
+  );
+};
+
+export default dynamic(() => Promise.resolve(squiggle), { ssr: false });
+
 function limitValue (n: number): Tuple<number> {
   return [0.1 * n, 0.9 * n];
 } 
@@ -67,37 +101,3 @@ function pickFrom (a: string[]): string {
 function seedNumber (seed: number, entropy: number): number {
   return Math.floor(toRandomNum([seed - entropy, seed + entropy]));
 }
-
-const squiggle: FC = () => {
-  const seed = seedNumber(8, 3);
-
-  const moveTo = `M ${centerOf(windowSize())}`;
-  
-  const curveTo = Array(seed)
-    .fill(0)
-    .map(windowSize)
-    .map(toCurveTriplet)
-    .map(toCurveString)
-    .join(' ');
-
-  const path = `${moveTo} ${curveTo} Z`;
-
-  return (
-    <>
-      <div onClick={useUpdate()}>
-        <svg width={window.innerWidth} height={window.innerHeight}>
-          <path 
-            d={path} 
-            style={{ 
-              fill: 'none', 
-              stroke: pickFrom(colors), 
-              strokeWidth: seedNumber(14, 6) 
-            }} 
-          />
-        </svg>
-      </div>
-    </>
-  );
-};
-
-export default dynamic(() => Promise.resolve(squiggle), { ssr: false });
