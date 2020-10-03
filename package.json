@@ -11,11 +11,12 @@
   ],
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
-    "next": "^9.2.2",
+    "next": "^9.5.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-three-fiber": "^4.0.28",
     "react-use": "^14.1.0",
+    "react-youtube": "^7.12.0",
     "three": "^0.115.0"
   },
   "devDependencies": {
@@ -53,13 +54,13 @@
   },
   "scripts": {
     "build": "next build",
-    "dev": "next",
+    "dev": "next dev",
     "dist": "yarn build && yarn export",
     "export": "next export",
-    "lint": "eslint .",
+    "lint": "eslint ./{works/**/*.{ts,tsx},pages/*.tsx}",
     "lint:fix": "yarn lint --fix",
     "new:page": "sh -c 'sed s/page/${0}/g ./demo/page.tsx > ./pages/${0}.tsx'",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write './{pages,src}/**/*.{js,ts,tsx}'",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write './{pages,works}/**/*.{js,ts,tsx}'",
     "sass": "sass ./src/styles/index.scss ./out/index.css && rm ./out/index.css.map",
     "start": "next start",
     "serve": "serve -p 8080 out",
