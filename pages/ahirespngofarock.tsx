@@ -20,7 +20,6 @@ const ROCK_PATH = '/static/ahirespngofarock.png';
 const SPEED = 0.01;
 const BULGE = 36;
 
-
 const Rock: FC = () => {
   const { gl } = useThree();
   const [time, setTime] = useState(0);
@@ -35,7 +34,11 @@ const Rock: FC = () => {
   });
 
   return error ? null : (
-    <mesh onClick={(): void => { setColor(color ? 0 : 1); }} >
+    <mesh
+      onClick={(): void => {
+        setColor(color ? 0 : 1);
+      }}
+    >
       <planeGeometry attach="geometry" />
       <meshStandardMaterial
         transparent
@@ -48,7 +51,7 @@ const Rock: FC = () => {
 };
 
 const ahirespngofarock: FC = () => (
-  <div style={{ width: '100%', height: '100%' }} >
+  <div style={{ width: '100%', height: '100%' }}>
     <Canvas
       camera={{
         aspect: 1,
@@ -66,8 +69,7 @@ const ahirespngofarock: FC = () => (
 
 export default dynamic(() => Promise.resolve(ahirespngofarock), { ssr: false });
 
-
-function geometry (time: number): PlaneGeometry {
+function geometry(time: number): PlaneGeometry {
   const geo = new PlaneGeometry(innerHeight, innerHeight, 5, 5);
   geo.vertices.forEach((vert, i, { length }) =>
     vert.setZ(BULGE * Math.cos(time + (i % length)))
@@ -76,7 +78,7 @@ function geometry (time: number): PlaneGeometry {
   return geo;
 }
 
-async function texture (): Promise<Texture> {
+async function texture(): Promise<Texture> {
   return await new TextureLoader().load(ROCK_PATH, (tex) => {
     tex.mapping = UVMapping;
     tex.wrapS = ClampToEdgeWrapping;
