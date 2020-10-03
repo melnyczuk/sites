@@ -10,7 +10,11 @@
     "jsx": "preserve",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom","dom.iterable","esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
@@ -19,6 +23,11 @@
     "isolatedModules": true,
     "resolveJsonModule": true
   },
-  "include": ["pages","src","demo/page.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "pages",
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

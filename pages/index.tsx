@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Styles } from '../types';
 import '../public/static/base.css';
 
-const pages = ['imgxxxx', 'squiggle', 'ahirespngofarock'];
+const works = ['imgxxxx', 'squiggle', 'ahirespngofarock'];
 
 const styles: Styles = {
   a: {
@@ -31,10 +31,10 @@ const styles: Styles = {
 
 const index: FC = () => (
   <ul style={styles.ul}>
-    {pages.map((page) => (
-      <li style={styles.li} key={page}>
-        <a style={styles.a} href={`/${page}`}>
-          {page}
+    {works.map((work) => (
+      <li style={styles.li} key={work}>
+        <a style={styles.a} href={`/${work}`}>
+          {work}
         </a>
       </li>
     ))}

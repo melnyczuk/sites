@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import React, { FC, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { useAsync } from 'react-use';
 import { Canvas, useFrame, useThree } from 'react-three-fiber';
 import {
@@ -13,8 +12,6 @@ import {
   TextureLoader,
   UVMapping,
 } from 'three';
-
-import '../public/static/base.css';
 
 const ROCK_PATH = '/static/ahirespngofarock.png';
 const SPEED = 0.01;
@@ -67,8 +64,6 @@ const ahirespngofarock: FC = () => (
   </div>
 );
 
-export default dynamic(() => Promise.resolve(ahirespngofarock), { ssr: false });
-
 function geometry(time: number): PlaneGeometry {
   const geo = new PlaneGeometry(innerHeight, innerHeight, 5, 5);
   geo.vertices.forEach((vert, i, { length }) =>
@@ -86,3 +81,5 @@ async function texture(): Promise<Texture> {
     tex.needsUpdate = true;
   });
 }
+
+export default ahirespngofarock;

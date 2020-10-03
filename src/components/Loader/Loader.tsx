@@ -8,6 +8,11 @@ const style = {
   margin: '32px',
 };
 
-const Loader: FC = () => (<p style={style}>loading<Ellipsis /></p>);
+const Loader: FC = () => (
+  <p style={style}>
+    loading
+    <Ellipsis />
+  </p>
+);
 
 export default Loader;

@@ -1,5 +1,4 @@
 import React, { CSSProperties, FC, ReactElement } from 'react';
-import '../../public/static/base.css';
 
 function StylingContainer(style: CSSProperties): FC {
   return function Container({ children }): ReactElement {

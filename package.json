@@ -57,14 +57,12 @@
     "dev": "next dev",
     "dist": "yarn build && yarn export",
     "export": "next export",
-    "lint": "eslint ./{works/**/*.{ts,tsx},pages/*.tsx}",
+    "lint": "eslint './{src/**/*.{ts,tsx},pages/*.tsx}'",
     "lint:fix": "yarn lint --fix",
-    "new:page": "sh -c 'sed s/page/${0}/g ./demo/page.tsx > ./pages/${0}.tsx'",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write './{pages,works}/**/*.{js,ts,tsx}'",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write './{src/**/*.{ts,tsx},pages/*.tsx}'",
     "sass": "sass ./src/styles/index.scss ./out/index.css && rm ./out/index.css.map",
     "start": "next start",
     "serve": "serve -p 8080 out",
-    "typecheck": "tsc --noEmit",
-    "typecheck:watch": "yarn type-check -- --watch"
+    "typecheck": "tsc --noEmit"
   }
 }
