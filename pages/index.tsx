@@ -1,35 +1,49 @@
 import React, { FC } from 'react';
+import { join } from 'path';
 
 import { Styles } from '../types';
 import '../public/static/base.css';
-
-const works = ['imgxxxx', 'squiggle', 'ahirespngofarock'];
 
 const styles: Styles = {
   a: {
     fontFamily: '"Archivo", sans-serif',
     fontSize: '40px',
     fontWeight: 'bold',
-    padding: '8px',
-    width: '100%',
+    padding: '8px 16px',
     float: 'left',
   },
   li: {
     float: 'left',
-    width: '100%',
     margin: '2px',
     borderLeft: '4px solid black',
     borderTop: '4px solid black',
   },
   ul: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: '256px',
+    display: 'grid',
+    margin: '0 auto',
+    width: 'max-content',
   },
 };
 
-const index: FC = () => (
+export const getStaticProps = async (): Promise<{
+  props: { works: string[] };
+}> => ({
+  props: {
+    // eslint-disable-next-line no-undef
+    works: await require('fs')
+      .readdirSync('./pages')
+      .map((page) => [
+        // eslint-disable-next-line no-undef
+        require('fs').statSync(join('./pages', page)).mtime,
+        page,
+      ])
+      .sort(([a], [b]) => b.valueOf() - a.valueOf())
+      .map(([, page]) => page.split('.ts')[0])
+      .filter((page) => page !== 'index'),
+  },
+});
+
+const index: FC<{ works: string[] }> = ({ works }) => (
   <ul style={styles.ul}>
     {works.map((work) => (
       <li style={styles.li} key={work}>
