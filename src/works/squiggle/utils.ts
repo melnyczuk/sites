@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/*eslint-env browser*/
 import { RefObject } from 'react';
 import { Bounds, Coord, Triple, Tuple } from './types';
 
