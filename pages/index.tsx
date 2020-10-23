@@ -3,6 +3,13 @@ import { join } from 'path';
 
 import { Styles } from '../types';
 import '../public/static/base.css';
+import { GetStaticProps } from 'next';
+
+const EXCLUDED_PAGES = ['index', '_app'];
+
+type IndexProps = {
+  works: string[];
+};
 
 const styles: Styles = {
   a: {
@@ -25,9 +32,7 @@ const styles: Styles = {
   },
 };
 
-export const getStaticProps = async (): Promise<{
-  props: { works: string[] };
-}> => ({
+export const getStaticProps: GetStaticProps<IndexProps> = async () => ({
   props: {
     // eslint-disable-next-line no-undef
     works: await require('fs')
@@ -39,11 +44,11 @@ export const getStaticProps = async (): Promise<{
       ])
       .sort(([a], [b]) => b.valueOf() - a.valueOf())
       .map(([, page]) => page.split('.ts')[0])
-      .filter((page) => page !== 'index'),
+      .filter((page) => !EXCLUDED_PAGES.includes(page)),
   },
 });
 
-const index: FC<{ works: string[] }> = ({ works }) => (
+const index: FC<IndexProps> = ({ works }) => (
   <ul style={styles.ul}>
     {works.map((work) => (
       <li style={styles.li} key={work}>
