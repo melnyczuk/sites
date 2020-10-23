@@ -1,10 +1,4 @@
-import React, { CSSProperties, FC, ReactElement } from 'react';
-
-function StylingContainer(style: CSSProperties): FC {
-  return function Container({ children }): ReactElement {
-    return <div style={style}>{children}</div>;
-  };
-}
+import { StylingContainer } from '../../components';
 
 export const PageDiv = StylingContainer({
   display: 'block',

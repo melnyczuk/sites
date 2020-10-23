@@ -1,18 +1,16 @@
 import React, { FC } from 'react';
 
 import Ellipsis from '../Ellipsis';
+import { Paragraph, CenterDiv } from './styles';
 
-const style = {
-  fontFamily: 'initial',
-  fontSize: '18px',
-  margin: '32px',
-};
 
 const Loader: FC = () => (
-  <p style={style}>
-    loading
-    <Ellipsis />
-  </p>
+  <CenterDiv>
+    <Paragraph>
+      loading
+      <Ellipsis />
+    </Paragraph>
+  </CenterDiv>
 );
 
 export default Loader;
