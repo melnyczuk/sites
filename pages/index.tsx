@@ -15,23 +15,16 @@ const styles: Styles = {
     padding: '8px 16px',
     float: 'left',
   },
-  h1: {
-    display: 'flex',
-    margin: '2px',
-    border: '4px solid black',
-    width: '100%',
-  },
   li: {
     float: 'left',
     width: '100%',
     margin: '2px',
     borderLeft: '4px solid black',
     borderTop: '4px solid black',
-    borderRight: '4px solid transparent',
   },
   ul: {
     display: 'grid',
-    margin: '2px auto',
+    margin: '0 auto',
     width: 'max-content',
   },
 };
@@ -58,11 +51,6 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async () => ({
 
 const index: FC<IndexPageProps> = ({ works }) => (
   <ul style={styles.ul}>
-    <h1 style={styles.h1}>
-      <a style={styles.a} href="https://www.melnycz.uk">
-        melnycz.uk
-      </a>
-    </h1>
     {works.map((work) => (
       <li style={styles.li} key={work}>
         <a style={styles.a} href={`/${work}`}>
