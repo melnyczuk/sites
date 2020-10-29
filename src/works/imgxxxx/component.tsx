@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useAsyncRetry, useWindowSize } from 'react-use';
 import YouTube from 'react-youtube';
 
+import { Loader } from '../../components';
 import { VideoInfo } from './types';
 import { VideoDiv, DescDiv, PageDiv } from './styles';
 
@@ -15,7 +16,6 @@ const ImgXXXX: FC = () => {
 
   const { loading, error, value, retry } = useAsyncRetry<VideoInfo>(
     async () => {
-      // eslint-disable-next-line no-undef
       const r = await fetch(ENDPOINT);
       return r.json();
     }
@@ -35,6 +35,7 @@ const ImgXXXX: FC = () => {
             background: typeof window === 'undefined' ? 'black' : 'white',
           }}
         />
+        <Loader/>
       </VideoDiv>
     );
   }

@@ -44,8 +44,7 @@
   "lint-staged": {
     "*.{js,jsx}": [
       "yarn lint:fix",
-      "yarn prettier",
-      "git add"
+      "yarn prettier"
     ]
   },
   "resolutions": {
@@ -57,12 +56,13 @@
     "dev": "next dev",
     "dist": "yarn build && yarn export",
     "export": "next export",
-    "lint": "eslint './{src/**/*.{ts,tsx},pages/*.tsx}'",
+    "lint": "eslint './{src/**/*.{ts,tsx},pages/*.{ts,tsx}}'",
     "lint:fix": "yarn lint --fix",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write './{src/**/*.{ts,tsx},pages/*.tsx}'",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write './{src/**/*.{ts,tsx},pages/*.{ts,tsx}}'",
     "sass": "sass ./src/styles/index.scss ./out/index.css && rm ./out/index.css.map",
     "start": "next start",
     "serve": "serve -p 8080 out",
+    "serve:https": "yarn serve --ssl-cert localhost.crt --ssl-key localhost.key",
     "typecheck": "tsc --noEmit"
   }
 }

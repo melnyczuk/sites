@@ -1,4 +1,8 @@
 {
+  "env": {
+    "es6": true,
+    "browser": true
+  },
   "extends": [
     "eslint:recommended",
     "plugin:import/errors",
@@ -23,23 +27,44 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "indent": [2, 2],
-    "@typescript-eslint/indent": [2, 2],
+    "indent": [
+      2,
+      2
+    ],
+    "@typescript-eslint/indent": [
+      0,
+      2
+    ],
     "@typescript-eslint/explicit-function-return-type": 2,
     "@typescript-eslint/no-use-before-define": 0,
-    "import/imports-first": ["error", "absolute-first"],
+    "import/imports-first": [
+      "error",
+      "absolute-first"
+    ],
     "import/newline-after-import": 2,
     "import/prefer-default-export": 0,
     "import/no-unresolved": 2,
     "no-underscore-dangle": 0,
     "react/prop-types": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
     "semi": 2
   },
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".ts", ".tsx", ".d.ts"]
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".d.ts"
+        ]
       }
     }
   }

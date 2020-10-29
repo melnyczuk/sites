@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { RefObject } from 'react';
 import { Bounds, Coord, Triple, Tuple } from './types';
 

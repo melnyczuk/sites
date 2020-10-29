@@ -1,17 +1,18 @@
 import React, { FC } from 'react';
+import { join } from 'path';
+import { GetStaticProps } from 'next';
 
 import { Styles } from '../types';
 import '../public/static/base.css';
 
-const works = ['imgxxxx', 'squiggle', 'ahirespngofarock'];
+const EXCLUDED_PAGES = ['index', '_app'];
 
 const styles: Styles = {
   a: {
     fontFamily: '"Archivo", sans-serif',
     fontSize: '40px',
     fontWeight: 'bold',
-    padding: '8px',
-    width: '100%',
+    padding: '8px 16px',
     float: 'left',
   },
   li: {
@@ -22,14 +23,33 @@ const styles: Styles = {
     borderTop: '4px solid black',
   },
   ul: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: '256px',
+    display: 'grid',
+    margin: '0 auto',
+    width: 'max-content',
   },
 };
 
-const index: FC = () => (
+type IndexPageProps = {
+  works: string[];
+};
+
+export const getStaticProps: GetStaticProps<IndexPageProps> = async () => ({
+  props: {
+    // eslint-disable-next-line no-undef
+    works: await require('fs')
+      .readdirSync('./pages')
+      .map((page) => [
+        // eslint-disable-next-line no-undef
+        require('fs').statSync(join('./pages', page)).mtime,
+        page,
+      ])
+      .sort(([a], [b]) => b.valueOf() - a.valueOf())
+      .map(([, page]) => page.split('.ts')[0])
+      .filter((page) => !EXCLUDED_PAGES.includes(page)),
+  },
+});
+
+const index: FC<IndexPageProps> = ({ works }) => (
   <ul style={styles.ul}>
     {works.map((work) => (
       <li style={styles.li} key={work}>

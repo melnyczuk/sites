@@ -1,18 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import { useInterval } from 'react-use';
+import { CenterDiv, Paragraph } from './styles';
 
-import Ellipsis from '../Ellipsis';
+const Loader: FC = () => {
+  const [count, setCount] = useState(0);
 
-const style = {
-  fontFamily: 'initial',
-  fontSize: '18px',
-  margin: '32px',
+  useInterval(() => {
+    setCount(count + 1);
+  }, 500);
+
+  return (
+    <CenterDiv>
+      <Paragraph>
+        <>loading{'.'.repeat(count % 4)}</>
+      </Paragraph>
+    </CenterDiv>
+  );
 };
-
-const Loader: FC = () => (
-  <p style={style}>
-    loading
-    <Ellipsis />
-  </p>
-);
 
 export default Loader;

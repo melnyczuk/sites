@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React, { FC, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Canvas, useFrame, useThree } from 'react-three-fiber';
