@@ -15,7 +15,6 @@ const ImgXXXX: FC = () => {
 
   const { loading, error, value, retry } = useAsyncRetry<VideoInfo>(
     async () => {
-      // eslint-disable-next-line no-undef
       const r = await fetch(ENDPOINT);
       return r.json();
     }
