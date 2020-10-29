@@ -11,3 +11,6 @@ npm-debug.log
 *.txt
 *.wg
 .DS_Store
+*.key
+*.crt
+.env*
