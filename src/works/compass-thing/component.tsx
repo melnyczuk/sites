@@ -1,39 +1,71 @@
 /*eslint-env browser*/
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
+import { useGeolocation } from 'react-use';
+
 import { useDeviceOrientation, useLodestone } from './hooks';
+import { BigDiv, CenterDiv, NeedleDiv } from './styles';
 
-import Loader from '../../components/Loader';
-import { getNeedleDiv } from './styles';
-
-const LODESTONE_URL = 'https://192.168.2.100:7777/ratings';
+// eslint-disable-next-line no-undef
+const LODESTONE_URL = process.env.NEXT_PUBLIC_LODESTONE_URL;
 
 const fetchOptions = {
   headers: {
     'content-type': 'application/json',
-    cors: 'no-cors',
     'Access-Control-Allow-Origin': '*',
   },
 };
 
+const getRandomAngle = (): number => {
+  return Math.random() * 360;
+};
+
 const Compass: FC = () => {
-  const { heading = 0 } = useDeviceOrientation();
+  const geo = useGeolocation();
+  const alpha = useDeviceOrientation().alpha || 0;
+  const [angle, setAngle] = useState(getRandomAngle());
   const lodestone = useLodestone(LODESTONE_URL, fetchOptions);
 
-  if (lodestone.error) {
-    console.log('error:', lodestone.error);
-    return <>error: {lodestone.error.message}</>;
-  }
-  const NeedleDiv = getNeedleDiv(heading - lodestone.value);
-  return lodestone.loading ? <Loader /> : <NeedleDiv />;
+  useMemo(() => {
+    if (lodestone.error) {
+      setAngle(getRandomAngle());
+    }
+
+    if (lodestone.value) {
+      setAngle(lodestone.value);
+    }
+  }, [lodestone.loading]);
+
+  const rotation = alpha - angle;
+  const transform = `rotate(${rotation}deg)`;
+
+  return (
+    <>
+      <div style={{ transform }}>
+        <NeedleDiv />
+      </div>
+      <br></br>
+      {angle}
+      <br></br>
+      <pre>
+        {JSON.stringify(geo, undefined, 2)}
+      </pre>
+    </>
+  );
 };
 
 const CompassThing: FC = () => {
   const [geoAllowed, setGeoAllowed] = useState<boolean>(false);
 
   return !geoAllowed ? (
-    <button onClick={(): void => setGeoAllowed(true)}>locate me</button>
+    <CenterDiv>
+      <button onClick={(): void => setGeoAllowed(true)}>
+        <BigDiv>locate me</BigDiv>
+      </button>
+    </CenterDiv>
   ) : (
-    <Compass />
+    <CenterDiv>
+      <Compass />
+    </CenterDiv>
   );
 };
 

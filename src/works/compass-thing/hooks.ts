@@ -9,20 +9,16 @@ import {
 } from 'react-use';
 import { AsyncState } from 'react-use/lib/useAsync';
 
-export interface DeviceOrientationState {
-  absolute: number | null;
-  alpha: number | null;
-  beta: number | null;
-  gamma: number | null;
-  heading: number | null;
-}
+type DeviceOrientationState = Pick<
+  DeviceOrientationEvent,
+  'absolute' | 'alpha' | 'beta' | 'gamma'
+>;
 
 const defaultState: DeviceOrientationState = {
-  absolute: null,
+  absolute: false,
   alpha: null,
   beta: null,
   gamma: null,
-  heading: null,
 };
 
 export const useDeviceOrientation = (
@@ -33,8 +29,7 @@ export const useDeviceOrientation = (
   useEffect(() => {
     const handler = (event): void => {
       const { absolute, alpha, beta, gamma } = event;
-      const heading = getCompassHeading({ alpha, beta, gamma });
-      setState({ absolute, alpha, beta, gamma, heading });
+      setState({ absolute, alpha, beta, gamma });
     };
 
     window.addEventListener('deviceorientation', handler);
@@ -49,7 +44,7 @@ export const useDeviceOrientation = (
 
 export const useLodestone = (
   url: string,
-  opts: AxiosRequestConfig
+  opts: AxiosRequestConfig,
 ): AsyncState<number> => {
   const geo = useGeolocation();
 
@@ -57,28 +52,23 @@ export const useLodestone = (
     if (geo.latitude && geo.longitude) {
       const { latitude: lat, longitude: lng } = geo;
       const response = await Axios.post(url, { lat, lng }, opts);
-      console.log('task', response);
-      return response.data;
+      const { result, error } = response.data;
+      if (error) throw new Error(error);
+      return result;
     }
   }, [geo.latitude, geo.longitude]);
 
-  const angle = useAsyncRetry<string>(
-    async (): Promise<string> => {
-      console.log('geo', geo);
-      console.log('task', task);
-      if (task.value) {
-        const response = await Axios.get(`${url}/${task.value}`, opts);
-        console.log('angle', response);
-        return response.data;
-      }
+  const angle = useAsyncRetry<string>(async (): Promise<string> => {
+    if (task.value) {
+      const response = await Axios.get(`${url}/${task.value}`, opts);
+      const { result, error } = response.data;
+      if (error) throw new Error(error);
+      return result;
     }
-  );
+  }, [geo.latitude, geo.longitude]);
 
   const noGeo = geo.loading === false && !geo.latitude && !geo.longitude;
-
-  const angleReady = !!angle.value && angle.value !== 'PENDING';
-
-  const stopPolling = noGeo || angleReady;
+  const stopPolling = noGeo || !!angle.value;
 
   useInterval(angle.retry, stopPolling ? null : 2000);
 
@@ -99,39 +89,3 @@ export const useLodestone = (
     value: parseFloat(angle.value),
   };
 };
-
-// https://stackoverflow.com/questions/18112729/calculate-compass-heading-from-deviceorientation-event-api
-function getCompassHeading({ alpha, beta, gamma }): number {
-  // Convert degrees to radians
-  const alphaRad = alpha * (Math.PI / 180);
-  const betaRad = beta * (Math.PI / 180);
-  const gammaRad = gamma * (Math.PI / 180);
-
-  // Calculate equation components
-  const cA = Math.cos(alphaRad);
-  const sA = Math.sin(alphaRad);
-  // const cB = Math.cos(betaRad);
-  const sB = Math.sin(betaRad);
-  const cG = Math.cos(gammaRad);
-  const sG = Math.sin(gammaRad);
-
-  // Calculate A, B, C rotation components
-  const rA = -cA * sG - sA * sB * cG;
-  const rB = -sA * sG + cA * sB * cG;
-  // const rC = - cB * cG;
-
-  // Calculate compass heading
-  let compassHeading = Math.atan(rA / rB);
-
-  // Convert from half unit circle to whole unit circle
-  if (rB < 0) {
-    compassHeading += Math.PI;
-  } else if (rA < 0) {
-    compassHeading += 2 * Math.PI;
-  }
-
-  // Convert radians to degrees
-  compassHeading *= 180 / Math.PI;
-
-  return compassHeading;
-}
