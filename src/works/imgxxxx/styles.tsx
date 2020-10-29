@@ -1,26 +1,20 @@
-import React, { CSSProperties, FC, ReactElement } from 'react';
+import { getStylingContainer } from '../../hof';
 
-function StylingContainer(style: CSSProperties): FC {
-  return function Container({ children }): ReactElement {
-    return <div style={style}>{children}</div>;
-  };
-}
-
-export const PageDiv = StylingContainer({
+export const PageDiv = getStylingContainer({
   display: 'block',
   marginLeft: '25%',
   marginRight: '25%',
   justifyContent: 'center',
 });
 
-export const VideoDiv = StylingContainer({
+export const VideoDiv = getStylingContainer({
   marginTop: 50,
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
 });
 
-export const DescDiv = StylingContainer({
+export const DescDiv = getStylingContainer({
   fontFamily: 'Sans-Serif',
   textAlign: 'left',
   display: 'block',
