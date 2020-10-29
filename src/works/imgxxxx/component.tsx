@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useAsyncRetry, useWindowSize } from 'react-use';
 import YouTube from 'react-youtube';
 
+import { Loader } from '../../components';
 import { VideoInfo } from './types';
 import { VideoDiv, DescDiv, PageDiv } from './styles';
 
@@ -34,6 +35,7 @@ const ImgXXXX: FC = () => {
             background: typeof window === 'undefined' ? 'black' : 'white',
           }}
         />
+        <Loader/>
       </VideoDiv>
     );
   }
